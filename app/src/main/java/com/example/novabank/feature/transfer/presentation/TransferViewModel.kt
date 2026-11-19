@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.novabank.core.util.parseAmountToMinor
 import com.example.novabank.core.util.sanitizeAmountInput
 import com.example.novabank.feature.home.domain.HomeRepository
+import com.example.novabank.feature.transfer.domain.AmountError
+import com.example.novabank.feature.transfer.domain.InsufficientFundsException
 import com.example.novabank.feature.transfer.domain.TransferRepository
 import com.example.novabank.feature.transfer.domain.ValidateTransferUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +15,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -27,19 +30,16 @@ class TransferViewModel @Inject constructor(
     val uiState: StateFlow<TransferUiState> = _uiState.asStateFlow()
 
     init {
-        loadBalance()
+        observeBalance()
     }
 
-    private fun loadBalance() {
+    private fun observeBalance() {
         viewModelScope.launch {
-            try {
-                val account = homeRepository.getAccount()
-                _uiState.update { it.copy(balanceMinor = account.balanceMinor) }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = "Balans yüklənmədi") }
-            }
+            homeRepository.observeAccount()
+                .catch { _uiState.update { s -> s.copy(errorMessage = "Balans yüklənmədi") } }
+                .collect { account ->
+                    _uiState.update { it.copy(balanceMinor = account.balanceMinor) }
+                }
         }
     }
 
@@ -78,6 +78,10 @@ class TransferViewModel @Inject constructor(
                 _uiState.update { it.copy(isSubmitting = false, receipt = receipt) }
             } catch (e: CancellationException) {
                 throw e
+            } catch (e: InsufficientFundsException) {
+                _uiState.update {
+                    it.copy(isSubmitting = false, amountError = AmountError.INSUFFICIENT_FUNDS)
+                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(isSubmitting = false, errorMessage = "Köçürmə alınmadı, yenidən cəhd et")
