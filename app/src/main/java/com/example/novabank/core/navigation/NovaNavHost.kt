@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.novabank.core.designsystem.PlaceholderScreen
 import com.example.novabank.feature.auth.presentation.LoginRoute
 import com.example.novabank.feature.home.presentation.HomeRoute
+import com.example.novabank.feature.transfer.presentation.TransferRoute
 
 @Composable
 fun NovaNavHost(
@@ -28,7 +29,12 @@ fun NovaNavHost(
                 },
             )
         }
-        composable(Routes.HOME) { HomeRoute() }
+        composable(Routes.HOME) {
+            HomeRoute(onTransferClick = { navController.navigate(Routes.TRANSFER) })
+        }
+        composable(Routes.TRANSFER) {
+            TransferRoute(onBack = { navController.popBackStack() })
+        }
         composable(Routes.CARDS) { PlaceholderScreen(title = "Kartlar") }
         composable(Routes.PAYMENTS) { PlaceholderScreen(title = "Ödənişlər") }
         composable(Routes.PROFILE) { PlaceholderScreen(title = "Profil") }
