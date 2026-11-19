@@ -14,3 +14,4 @@ data class TransferReceipt(
     val amountMinor: Long,
     val recipientMasked: String,
 )
+class InsufficientFundsException : Exception()
