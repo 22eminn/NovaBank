@@ -53,15 +53,19 @@ import com.example.novabank.ui.theme.PositiveGreen
 import androidx.compose.ui.res.painterResource
 import com.example.novabank.R
 @Composable
-fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeRoute(
+    onTransferClick: () -> Unit,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    HomeScreen(state = state, onRetry = viewModel::load)
+    HomeScreen(state = state, onRetry = viewModel::load, onTransferClick = onTransferClick)
 }
 
 @Composable
 fun HomeScreen(
     state: HomeUiState,
     onRetry: () -> Unit,
+    onTransferClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxSize().statusBarsPadding()) {
@@ -70,19 +74,19 @@ fun HomeScreen(
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
             is HomeUiState.Error ->
                 ErrorContent(state.message, onRetry, Modifier.align(Alignment.Center))
-            is HomeUiState.Success -> HomeContent(state)
+            is HomeUiState.Success -> HomeContent(state, onTransferClick)
         }
     }
 }
 @Composable
-private fun HomeContent(state: HomeUiState.Success) {
+private fun HomeContent(state: HomeUiState.Success, onTransferClick: () -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         item { Header(name = state.account.ownerName) }
         item { BalanceCard(state.account) }
-        item { QuickActions() }
+        item { QuickActions(onTransferClick) }
         item {
             Text("Son əməliyyatlar", style = MaterialTheme.typography.titleMedium)
         }
@@ -154,12 +158,12 @@ private fun BalanceCard(account: Account) {
 }
 
 @Composable
-private fun QuickActions() {
+private fun QuickActions(onTransferClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        QuickAction(R.drawable.ic_send, "Köçürmə")
+        QuickAction(R.drawable.ic_send, "Köçürmə", onClick = onTransferClick)
         QuickAction(R.drawable.ic_payments, "Ödəniş")
         QuickAction(R.drawable.ic_currency_exchange, "Məzənnə")
         QuickAction(R.drawable.ic_more_horiz, "Daha çox")
@@ -277,6 +281,7 @@ private fun HomeScreenPreview() {
                 ),
             ),
             onRetry = {},
+            onTransferClick = {},
         )
     }
 }
