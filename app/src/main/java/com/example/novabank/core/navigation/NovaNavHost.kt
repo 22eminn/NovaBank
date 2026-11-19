@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.novabank.core.designsystem.PlaceholderScreen
 import com.example.novabank.feature.auth.presentation.LoginRoute
+import com.example.novabank.feature.home.presentation.HomeRoute
 
 @Composable
 fun NovaNavHost(modifier: Modifier = Modifier) {
@@ -28,7 +29,7 @@ fun NovaNavHost(modifier: Modifier = Modifier) {
             )
         }
         composable(Routes.HOME) {
-            PlaceholderScreen(title = "Ana səhifə")
+            HomeRoute()
         }
     }
 }
