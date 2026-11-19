@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.novabank.core.designsystem.PlaceholderScreen
+import com.example.novabank.feature.auth.presentation.LoginRoute
 
 @Composable
 fun NovaNavHost(modifier: Modifier = Modifier) {
@@ -18,10 +19,8 @@ fun NovaNavHost(modifier: Modifier = Modifier) {
         modifier = modifier,
     ) {
         composable(Routes.LOGIN) {
-            PlaceholderScreen(
-                title = "Giriş",
-                buttonText = "Ana səhifəyə keç",
-                onButtonClick = {
+            LoginRoute(
+                onLoginSuccess = {
                     navController.navigate(Routes.HOME) {
                         popUpTo(Routes.LOGIN) { inclusive = true }
                     }
