@@ -23,17 +23,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            NovaBankTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    NovaNavHost()
+            setContent {
+                NovaBankTheme {
+                    NovaApp()
                 }
+            }
             }
         }
         }
-    }
+
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
