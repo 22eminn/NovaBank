@@ -1,5 +1,6 @@
 package com.example.novabank.feature.home.presentation
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,7 +49,8 @@ import com.example.novabank.feature.home.domain.Account
 import com.example.novabank.feature.home.domain.Transaction
 import com.example.novabank.ui.theme.NovaBankTheme
 import com.example.novabank.ui.theme.PositiveGreen
-
+import androidx.compose.ui.res.painterResource
+import com.example.novabank.R
 @Composable
 fun HomeRoute(viewModel: HomeViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -156,15 +159,19 @@ private fun QuickActions() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        QuickAction(Icons.AutoMirrored.Filled.Send, "Köçürmə")
-        QuickAction(Icons.Filled.Payments, "Ödəniş")
-        QuickAction(Icons.Filled.CurrencyExchange, "Məzənnə")
-        QuickAction(Icons.Filled.MoreHoriz, "Daha çox")
+        QuickAction(R.drawable.ic_send, "Köçürmə")
+        QuickAction(R.drawable.ic_payments, "Ödəniş")
+        QuickAction(R.drawable.ic_currency_exchange, "Məzənnə")
+        QuickAction(R.drawable.ic_more_horiz, "Daha çox")
     }
 }
 
 @Composable
-private fun QuickAction(icon: ImageVector, label: String, onClick: () -> Unit = {}) {
+private fun QuickAction(
+    @DrawableRes icon: Int,
+    label: String,
+    onClick: () -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
@@ -180,13 +187,16 @@ private fun QuickAction(icon: ImageVector, label: String, onClick: () -> Unit = 
             border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
         ) {
             Box(contentAlignment = Alignment.Center) {
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                Icon(
+                    painter = painterResource(icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                )
             }
         }
         Text(label, style = MaterialTheme.typography.labelMedium)
     }
 }
-
 @Composable
 private fun TransactionList(transactions: List<Transaction>) {
     Surface(
