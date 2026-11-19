@@ -5,4 +5,5 @@ object Routes {
     const val CARDS = "cards"
     const val PAYMENTS = "payments"
     const val PROFILE = "profile"
+    const val TRANSFER = "transfer"
 }
