@@ -189,7 +189,11 @@ private fun TransferForm(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             state.errorMessage?.let {
-                Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error)
+                Text(
+                    it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error
+                )
             }
             Button(
                 onClick = onSubmit,
@@ -270,7 +274,7 @@ private object CardNumberTransformation : VisualTransformation {
 
             override fun transformedToOriginal(offset: Int): Int = offset - offset / 5
         }
-        return TransformedText(AnnotatedString(formatted), offsets)
+        return TransformedText(androidx.compose.ui.text.AnnotatedString(formatted), offsets)
     }
 }
 
@@ -279,7 +283,11 @@ private object CardNumberTransformation : VisualTransformation {
 private fun TransferScreenPreview() {
     NovaBankTheme {
         TransferScreen(
-            state = TransferUiState(balanceMinor = 425_080, cardInput = "4111111111", amountInput = "50"),
+            state = TransferUiState(
+                balanceMinor = 425_080,
+                cardInput = "4111111111",
+                amountInput = "50"
+            ),
             onCardChange = {},
             onAmountChange = {},
             onSubmit = {},

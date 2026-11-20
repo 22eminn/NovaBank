@@ -16,15 +16,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.CurrencyExchange
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -37,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -45,13 +38,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.novabank.R
 import com.example.novabank.core.util.formatMoney
 import com.example.novabank.feature.home.domain.Account
 import com.example.novabank.feature.home.domain.Transaction
 import com.example.novabank.ui.theme.NovaBankTheme
 import com.example.novabank.ui.theme.PositiveGreen
-import androidx.compose.ui.res.painterResource
-import com.example.novabank.R
+
 @Composable
 fun HomeRoute(
     onTransferClick: () -> Unit,
@@ -72,12 +65,15 @@ fun HomeScreen(
         when (state) {
             HomeUiState.Loading ->
                 CircularProgressIndicator(Modifier.align(Alignment.Center))
+
             is HomeUiState.Error ->
                 ErrorContent(state.message, onRetry, Modifier.align(Alignment.Center))
+
             is HomeUiState.Success -> HomeContent(state, onTransferClick)
         }
     }
 }
+
 @Composable
 private fun HomeContent(state: HomeUiState.Success, onTransferClick: () -> Unit) {
     LazyColumn(
@@ -201,6 +197,7 @@ private fun QuickAction(
         Text(label, style = MaterialTheme.typography.labelMedium)
     }
 }
+
 @Composable
 private fun TransactionList(transactions: List<Transaction>) {
     Surface(
